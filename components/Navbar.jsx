@@ -58,6 +58,21 @@ export default function Navbar() {
                 <NavLink to="/signup">
                   <Button my={1} bg="none">Sing up</Button>
                 </NavLink>
+                <NavLink to="/admin">
+                  <Button my={1} bg="none">Admin</Button>
+                </NavLink>
+
+                <NavLink to="/editor">
+                  <Button my={1} bg="none">Editor</Button>
+                </NavLink>
+
+                <NavLink to="/lounge">
+                  <Button my={1} bg="none">Lounge</Button>
+                </NavLink>
+
+                <NavLink to="/protect">
+                  <Button my={1} bg="none">Protect Page</Button>
+                </NavLink>
               </Flex>
             </Box>
           </DrawerBody>

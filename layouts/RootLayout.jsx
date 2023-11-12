@@ -18,7 +18,7 @@ export default function RootLayout() {
             <GridItem
                 border="1px solid black"
             >
-                <Outlet />
+        <Outlet />
             </GridItem>
         </Grid>
     )

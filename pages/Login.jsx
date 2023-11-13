@@ -18,7 +18,7 @@ import axios from '../src/api/axios';
 import useAuth from '../hooks/useAuth';
 import {Link, useNavigate, useLocation} from "react-router-dom"
 
-const LOGIN_URL = "/login"
+const LOGIN_URL = "/api/v0/login/"
 
 export default function Login() {
 const {setAuth} = useAuth();

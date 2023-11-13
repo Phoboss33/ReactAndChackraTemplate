@@ -14,17 +14,21 @@ import {
   useColorModeValue,
   Link,
   Toast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react'
 
 import { useState, useRef, useEffect } from 'react'
-import { AddIcon, CheckIcon, CloseIcon, InfoIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { AddIcon, CheckIcon, ChevronDownIcon, CloseIcon, InfoIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { NavLink } from 'react-router-dom'
 import axios from "../src/api/axios"
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const USER_REGEX = /^[A-Za-zА-Яа-я][A-Za-zА-Яа-я0-9-_]{2,23}$/;
 const PWD_REGEX = /^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-const REGISTER_URL = "/signup"
+const REGISTER_URL = "/api/v0/register/"
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false)
@@ -36,10 +40,17 @@ export default function Signup() {
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
+  const [firstName, setFirstName,] = useState('');
+  const [lastName, setLastName,] = useState('');
+  const [date, setDate,] = useState('');
+
+  const [gender, setGender] = useState('');
+  const [chooseGender, setChooseGender] = useState(false);
+
   const [user, setUser] = useState('');
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
-
+  
   const [pwd, setPwd] = useState('');
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
@@ -90,18 +101,19 @@ export default function Signup() {
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
 
-    console.log(user, pwd, email)
-
+    //console.log(firstName, lastName, user, pwd, email, gender, date)
+    
     if (!v1 || !v2) {
       setErrMsg("Ошибка ввода, заполните все поля");
       return;
     }
     try {
-      const response = await axios.post(REGISTER_URL, JSON.stringify({user, pwd, email}), 
+      //const response = await axios.post(REGISTER_URL, JSON.stringify({firstName, lastName, user, pwd, email, gender, date}), 
+      const response = await axios.post(REGISTER_URL, JSON.stringify({user, email, pwd}), 
       {
         headers: {'Content-Type' : 'application/json'},
         withCredentials: true
-      }
+      } 
     );
     console.log(response.data)
     console.log(response.accessToken)
@@ -143,11 +155,8 @@ export default function Signup() {
         <Stack align={'center'}>
           <Text ref={errRef}>{errMsg}</Text>
           <Heading fontSize={'4xl'} textAlign={'center'}>
-            Sign up
+            Регистрация
           </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool features  🐯
-          </Text>
         </Stack>
         <Box
           rounded={'lg'}
@@ -155,10 +164,35 @@ export default function Signup() {
           boxShadow={'lg'}
           p={8}>
           <Stack spacing={4}>
+          <HStack>
+              <Box>
+                <FormControl id="firstName" isRequired>
+                  <FormLabel>First Name</FormLabel>
+                  <Input 
+                    type="text" 
+                    id="firstName"
+                    autoComplete="off"
+                    onChange={(event) => setFirstName(event.target.value)}
+                    required
+                  />
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="lastName">
+                  <FormLabel>Last Name</FormLabel>
+                  <Input 
+                  type="text" 
+                  id="lastName"
+                  autoComplete="off"
+                  onChange={(event) => setLastName(event.target.value)}
+                  />
+                </FormControl>
+              </Box>
+            </HStack>
             <FormControl  >
               <FormLabel htmlFor='username'>
               <Text>
-                  Email address:
+                  Email адрес:
                   {validEmail ? <CheckIcon color="green" boxSize={3} ml={2}/> : ""}
                   {validEmail || !email ? "" : <CloseIcon color="red" ml={2} boxSize={3}/> }
                 </Text>
@@ -196,13 +230,25 @@ export default function Signup() {
                 onFocus={() => setUserFocus(true)}
                 onBlur={() => setUserFocus(false)}
               />
-              <Box id="uidnote"my={2}>{userFocus && user && !validName ? <Text><InfoIcon mr={2}/>Только 3 - 24 буквы.</Text>: ""}</Box>
+              <Box id="uidnote"my={2}>{userFocus && user && !validName ? <Text><InfoIcon mr={2}/>Только 3 - 24 буквы.</Text>: ""}</Box> 
             </FormControl>
+
+            <Menu>
+              <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                {chooseGender ? gender === "M" ? "Мужской" : "Женский" : "Выбрать пол"}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => {setGender("M"), setChooseGender(true)}}>Мужской</MenuItem> {/* buttn и логику чтобы заменять текст*/}
+                <MenuItem onClick={() => {setGender("F"), setChooseGender(true)}}>Женский</MenuItem>
+              </MenuList>
+            </Menu>
+
+            <Input type='date' onChange={(event) => {setDate(event.target.value)}}/>
 
             <FormControl id="password">
               <FormLabel htmlFor='password'>
                 <Text>
-                  Password:
+                  Пароль:
                   {validPwd ? <CheckIcon color="green" boxSize={3} ml={2}/> : ""}
                   {validPwd || !pwd ? "" : <CloseIcon color="red" ml={2} boxSize={3}/> }
                 </Text>
@@ -239,7 +285,7 @@ export default function Signup() {
 
               <FormLabel pt={4} htmlFor="confirm_pwd">
               <Text>
-                  Confirm Password:
+                  Подтвердить пароль:
                   {validMatch && matchFocus ? <CheckIcon color="green" boxSize={3} ml={2}/> : ""}
                   {validMatch || !matchPwd ? "" : <CloseIcon color="red" ml={2} boxSize={3}/> }
                 </Text>

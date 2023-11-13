@@ -19,6 +19,7 @@ import Admin from '../pages/Admin'
 import Protect from '../pages/ProtectPage'
 import RequireAuth from '../components/RequireAuth'
 import Unauthorized from '../pages/unauth'
+import ProfilePage from '../pages/ProfilePage'
 
 function App() {
   const myRouter = createBrowserRouter(
@@ -29,7 +30,8 @@ function App() {
         <Route path="login"element={<Login />} /> 
         <Route path="signup" element={<Signin />}/>
         <Route path="unauth" element={<Unauthorized />}/>
-
+        <Route path="admin" element={<Admin />}/>
+        <Route path="profile" element={<ProfilePage />}/>
         {/* Protect routes*/}
         <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}> 
           <Route path="editor" element={<Editor />}/>
@@ -40,7 +42,7 @@ function App() {
         </Route>
 
         <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}> 
-          <Route path="admin" element={<Admin />}/>
+
           <Route path="protect" element={<Protect />}/>
         </Route>
 

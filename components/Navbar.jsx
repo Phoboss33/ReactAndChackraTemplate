@@ -73,6 +73,10 @@ export default function Navbar() {
                 <NavLink to="/protect">
                   <Button my={1} bg="none">Protect Page</Button>
                 </NavLink>
+
+                <NavLink to="/profile">
+                  <Button my={1} bg="none">Page</Button>
+                </NavLink>
               </Flex>
             </Box>
           </DrawerBody>
